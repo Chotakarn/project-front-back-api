@@ -254,3 +254,108 @@ authController.login = async(req , res , next ) => {
 }
 
 ```
+
+## Step 11 Current - User
+/controllers/auth-controller.js
+```js
+authController.currentUser = async (req , res , next) => {
+    //code
+    try {
+        res.json({ message : "Hello , current user"});
+    } catch (error) {
+        next(error);
+    }
+};
+
+update code
+
+authRouter.post("/register",validateWithZod(registerSchema) , authController.register);
+authRouter.post("/login" , validateWithZod(loginSchema) , authController.login);
+authRouter.get("/current-user" , authController.currentUser);
+module.exports = authRouter;
+
+```
+
+## Step 12 User Controller & Routes
+/controllers/user-controller.js
+```js
+// 1. List all users
+// 2. Update Role
+// 3. Delete User
+
+exports.listUsers =async(req,res,next) => {
+    //code
+    try {
+        res.json({message: "Hello, List Users"})
+    } catch (error) {
+        next(error)
+    }
+}
+
+exports.updateRole = async(req,res,next) =>{
+    try {
+        res.json({message:"Hello, Update Role"})
+    } catch (error) {
+        next(error)
+    }
+}
+
+exports.deleteUser = async(req,res,next) =>{
+    try {
+        res.json({message:"Hello, Delete User"})
+    } catch (error) {
+        next(error)
+    }
+}
+```
+
+
+/rotes/user-route.js
+```js
+const express = require("express");
+const router = express.Router();
+//Import controller
+const userController = require('../controllers/user-controller')
+
+//@ENDPOINT http://localhost:8000/api/users
+router.get('/users' , userController.listUsers);
+router.patch('/user/update-role',userController.updateRole);
+router.delete("/user/:id",userController.deleteUser)
+
+module.exports = router
+```
+
+
+
+update index.js
+```js
+const express = require("express");
+const cors = require("cors");
+const morgan = require("morgan");
+const authRouter = require("./routes/auth-router");
+const errorMiddleware = require("./middlewares/error");
+const notFound = require("./middlewares/not-found");
+const app = express();
+const userRouter = require("./routes/user-router");
+
+app.use(cors());
+app.use(morgan("dev"));
+//แปลงจาก sting เป็น เป้น JS object และจะสร้าง รีเควส.บอดี้
+app.use(express.json());
+
+
+app.use("/api", authRouter);
+app.use("/api", userRouter )
+app.use(notFound)
+app.use(errorMiddleware)
+
+const PORT = 8888;
+app.listen(PORT , () => console.log(`Server is running on port ${8888}`));
+```
+
+### when update code 
+```bash 
+git add . 
+git commit -m "message"
+git push
+```

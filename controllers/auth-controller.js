@@ -94,4 +94,14 @@ authController.login = async(req , res , next ) => {
     }
 }
 
+authController.currentUser = async (req , res , next) => {
+    //code
+    try {
+        res.json({ message : "Hello , current user"});
+    } catch (error) {
+        next(error);
+    }
+};
+
+
 module.exports = authController;

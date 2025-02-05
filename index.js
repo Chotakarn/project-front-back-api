@@ -5,7 +5,7 @@ const authRouter = require("./routes/auth-router");
 const errorMiddleware = require("./middlewares/error");
 const notFound = require("./middlewares/not-found");
 const app = express();
-
+const userRouter = require("./routes/user-router");
 
 app.use(cors());
 app.use(morgan("dev"));
@@ -14,7 +14,7 @@ app.use(express.json());
 
 
 app.use("/api", authRouter);
-
+app.use("/api", userRouter )
 app.use(notFound)
 app.use(errorMiddleware)
 
